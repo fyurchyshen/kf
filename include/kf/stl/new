@@ -1,0 +1,34 @@
+#pragma once
+
+#pragma warning(push)
+#pragma warning(disable : 4595) // non-member operator new or delete functions may not be declared inline
+
+inline void* __cdecl operator new(size_t size, POOL_TYPE poolType)
+{
+#pragma warning(suppress: 28160) // Must succeed pool allocations are forbidden. Allocation failures cause a system crash.
+    return ::ExAllocatePoolWithTag(poolType, size ? size : 1, 'n++C');
+}
+
+inline void __cdecl operator delete(void* ptr)
+{
+    if (ptr)
+    {
+        ::ExFreePoolWithTag(ptr, 'n++C');
+    }
+}
+
+inline void __cdecl operator delete[](void* ptr)
+{
+    if (ptr)
+    {
+        ::ExFreePoolWithTag(ptr, 'n++C');
+    }
+}
+
+// size-aware deallocation
+inline void __cdecl operator delete(void* ptr, size_t)
+{
+    operator delete(ptr);
+}
+
+#pragma warning(pop)
