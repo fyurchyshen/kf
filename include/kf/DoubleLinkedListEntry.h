@@ -13,7 +13,7 @@ namespace kf
 
         DoubleLinkedListEntry(DoubleLinkedListEntry&& other)
         {
-            *this = move(other);
+            *this = std::move(other);
         }
 
         ~DoubleLinkedListEntry()
