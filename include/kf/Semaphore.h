@@ -27,7 +27,7 @@ namespace kf
             return KeWaitForSingleObject(&m_semaphore, Executive, KernelMode, false, timeout);
         }
 
-        void release(LONG adjustment)
+        void release(LONG adjustment = 1)
         {
             KeReleaseSemaphore(&m_semaphore, IO_NO_INCREMENT, adjustment, FALSE);
         }
