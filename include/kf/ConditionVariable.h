@@ -52,6 +52,10 @@ namespace kf
                 result = Status::Timeout;
             }
 
+            m_resource.acquireExclusive();
+            --m_waitersCount;
+            m_resource.release();
+
             return result;
         }
 
