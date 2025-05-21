@@ -80,7 +80,7 @@ namespace kf
         }
 
     private:
-        atomic_long m_waitersCount = 0;
+        std::atomic_long m_waitersCount = 0;
         Semaphore m_semaphore;
     };
 }
