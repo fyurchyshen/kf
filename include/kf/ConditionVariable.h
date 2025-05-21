@@ -1,6 +1,5 @@
 #pragma once
 
-#include "EResource.h"
 #include "Semaphore.h"
 
 namespace kf
@@ -37,26 +36,15 @@ namespace kf
 
         Status waitFor(EResource& external, PLARGE_INTEGER timeout)
         {
-            Status result = Status::Success;
-
-            m_resource.acquireExclusive();
             ++m_waitersCount;
-            m_resource.release();
 
             external.release();
-            auto status = m_semaphore.wait(timeout);
+            auto status = NT_SUCCESS(m_semaphore.wait(timeout)) ? Status::Success : Status::Timeout;
             external.acquireExclusive();
 
-            if (!NT_SUCCESS(status))
-            {
-                result = Status::Timeout;
-            }
-
-            m_resource.acquireExclusive();
             --m_waitersCount;
-            m_resource.release();
 
-            return result;
+            return status;
         }
 
         template<class Predicate>
@@ -75,11 +63,8 @@ namespace kf
 
         void notifyOne()
         {
-            m_resource.acquireExclusive();
-            auto shouldRelease = m_waitersCount > 0;
-            m_resource.release();
-
-            if (shouldRelease)
+            auto waitersCount = m_waitersCount.load();
+            if (waitersCount > 0)
             {
                 m_semaphore.release();
             }
@@ -87,10 +72,7 @@ namespace kf
 
         void notifyAll()
         {
-            m_resource.acquireExclusive();
-            auto waitersCount = m_waitersCount;
-            m_resource.release();
-
+            auto waitersCount = m_waitersCount.load();
             if (waitersCount > 0)
             {
                 m_semaphore.release(waitersCount);
@@ -98,8 +80,7 @@ namespace kf
         }
 
     private:
-        long m_waitersCount = 0;
-        EResource m_resource;
+        atomic_long m_waitersCount = 0;
         Semaphore m_semaphore;
     };
 }

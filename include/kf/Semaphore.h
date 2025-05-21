@@ -29,7 +29,7 @@ namespace kf
 
         void release(LONG adjustment = 1)
         {
-            KeReleaseSemaphore(&m_semaphore, IO_NO_INCREMENT, adjustment, FALSE);
+            KeReleaseSemaphore(&m_semaphore, IO_NO_INCREMENT, adjustment, false);
         }
 
     private:
