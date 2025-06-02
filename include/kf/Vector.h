@@ -55,12 +55,12 @@ namespace kf
         //
         // Element access
         //
-        constexpr std::optional<T&> at(size_type pos) noexcept
+        constexpr std::optional<std::reference_wrapper<T>> at(size_type pos) noexcept
         {
             return pos < m_vector.size() ? m_vector[pos] : std::nullopt;
         }
 
-        constexpr std::optional<const T&> at(size_type pos) const noexcept
+        constexpr std::optional<std::reference_wrapper<const T>> at(size_type pos) const noexcept
         {
             return pos < m_vector.size() ? m_vector[pos] : std::nullopt;
         }
@@ -312,7 +312,7 @@ namespace kf
         }
 
         template<class... Args>
-        constexpr std::optional<T&> emplace_back(Args&&... args) noexcept(std::is_nothrow_move_constructible_v<T>)
+        constexpr std::optional<std::reference_wrapper<T>> emplace_back(Args&&... args) noexcept(std::is_nothrow_move_constructible_v<T>)
         {
             auto status = reallocateGrowth(m_vector.size() + 1);
             if (!NT_SUCCESS(status))
