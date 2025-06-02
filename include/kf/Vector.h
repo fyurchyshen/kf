@@ -57,12 +57,12 @@ namespace kf
         //
         constexpr std::optional<std::reference_wrapper<T>> at(size_type pos) noexcept
         {
-            return pos < m_vector.size() ? m_vector[pos] : std::nullopt;
+            return pos < m_vector.size() ? std::optional(std::ref(m_vector[pos])) : std::nullopt;
         }
 
         constexpr std::optional<std::reference_wrapper<const T>> at(size_type pos) const noexcept
         {
-            return pos < m_vector.size() ? m_vector[pos] : std::nullopt;
+            return pos < m_vector.size() ? std::optional(std::ref(m_vector[pos])) : std::nullopt;
         }
 
         constexpr T& operator[](size_type pos) noexcept
