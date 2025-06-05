@@ -38,6 +38,16 @@ namespace kf
         void fltAcquireShared();
         void fltRelease();
 
+        // Lockable
+        void lock();
+        bool try_lock();
+        void unlock();
+
+        // SharedLockable
+        void lock_shared();
+        bool try_lock_shared();
+        void unlock_shared();
+
     private:
         EResource(const EResource&);
         EResource& operator=(const EResource&);
@@ -125,5 +135,43 @@ namespace kf
     inline ULONG EResource::getOwnerCount()
     {
         return isAcquiredShared();
+    }
+
+    inline void EResource::lock()
+    {
+        KeEnterCriticalRegion();
+        acquireExclusive();
+    }
+
+    inline bool EResource::try_lock()
+    {
+        KeEnterCriticalRegion();
+        return acquireExclusive(false);
+    }
+
+    _Requires_lock_held_(m_resource)
+    inline void EResource::unlock()
+    {
+        release();
+        KeLeaveCriticalRegion();
+    }
+
+    inline void EResource::lock_shared()
+    {
+        KeEnterCriticalRegion();
+        acquireShared();
+    }
+
+    inline bool EResource::try_lock_shared()
+    {
+        KeEnterCriticalRegion();
+        return acquireShared(false);
+    }
+
+    _Requires_lock_held_(m_resource)
+    inline void EResource::unlock_shared()
+    {
+        release();
+        KeLeaveCriticalRegion();
     }
 }
