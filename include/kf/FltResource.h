@@ -53,9 +53,6 @@ namespace kf
             fltRelease();
         }
 
-        bool try_lock() = delete;
-        bool try_lock_shared() = delete;
-
     private:
         FltResource(const FltResource&);
         FltResource& operator=(const FltResource&);
