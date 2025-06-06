@@ -35,26 +35,22 @@ namespace kf
 
         void lock()
         {
-            KeEnterCriticalRegion();
             fltAcquireExclusive();
         }
 
         void unlock()
         {
             fltRelease();
-            KeLeaveCriticalRegion();
         }
 
         void lock_shared()
         {
-            KeEnterCriticalRegion();
             fltAcquireShared();
         }
 
         void unlock_shared()
         {
             fltRelease();
-            KeLeaveCriticalRegion();
         }
 
         bool try_lock() = delete;

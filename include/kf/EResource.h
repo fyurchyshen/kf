@@ -40,13 +40,13 @@ namespace kf
 
         // Lockable
         void lock();
-        bool try_lock();
         void unlock();
+        bool try_lock() = delete;
 
         // SharedLockable
         void lock_shared();
-        bool try_lock_shared();
         void unlock_shared();
+        bool try_lock_shared() = delete;
 
     private:
         EResource(const EResource&);
@@ -143,12 +143,6 @@ namespace kf
         acquireExclusive();
     }
 
-    inline bool EResource::try_lock()
-    {
-        KeEnterCriticalRegion();
-        return acquireExclusive(false);
-    }
-
     _Requires_lock_held_(m_resource)
     inline void EResource::unlock()
     {
@@ -160,12 +154,6 @@ namespace kf
     {
         KeEnterCriticalRegion();
         acquireShared();
-    }
-
-    inline bool EResource::try_lock_shared()
-    {
-        KeEnterCriticalRegion();
-        return acquireShared(false);
     }
 
     _Requires_lock_held_(m_resource)
