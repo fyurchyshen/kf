@@ -1,3 +1,9 @@
+// Requires the module that uses kf::vector to define the following methods:
+//   _CrtDbgReport
+//   _Xinvalid_argument
+//   _Xlength_error
+//   _Xout_of_range
+
 #pragma once
 
 #include "Allocator.h"
@@ -18,10 +24,11 @@ namespace kf
     {
     public:
         using size_type = Allocator::size_type;
-        using iterator = T*;
-        using const_iterator = const T*;
-        using reverse_iterator = std::reverse_iterator<iterator>;
-        using const_reverse_iterator = std::reverse_iterator<const_iterator>;
+        using vector_type = std::vector<T, Allocator>;
+        using iterator = vector_type::iterator;
+        using const_iterator = vector_type::const_iterator;
+        using reverse_iterator = vector_type::reverse_iterator;
+        using const_reverse_iterator = vector_type::const_reverse_iterator;
 
         //
         // Member functions
